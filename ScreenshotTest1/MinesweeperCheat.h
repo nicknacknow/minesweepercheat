@@ -162,12 +162,46 @@ public:
 		}
 		return data;
 	}
+
+	void FlagCell(cell_data& cell) {
+		cell.value = 0;
+		int x = ms_data.x + cell.x * ms_data.box_size;
+		int y = ms_data.y + cell.y * ms_data.box_size;
+
+		POINT p;
+		GetCursorPos(&p);
+
+		SetCursorPos(x + ms_data.box_size / 2, y + ms_data.box_size / 2);
+
+		mouse_event(MOUSEEVENTF_RIGHTDOWN, 0, 0, 0, 0);
+		Sleep(1);
+		mouse_event(MOUSEEVENTF_RIGHTUP, 0, 0, 0, 0);
+
+		SetCursorPos(p.x, p.y);
+	}
+
+	void ClearCell(cell_data& cell) {
+		if (cell.value == 0) printf("nooo\n");
+		int x = ms_data.x + cell.x * ms_data.box_size;
+		int y = ms_data.y + cell.y * ms_data.box_size;
+
+		POINT p;
+		GetCursorPos(&p);
+
+		SetCursorPos(x + ms_data.box_size / 2, y + ms_data.box_size / 2);
+
+		mouse_event(MOUSEEVENTF_LEFTDOWN, 0, 0, 0, 0);
+		Sleep(1);
+		mouse_event(MOUSEEVENTF_LEFTUP, 0, 0, 0, 0);
+
+		SetCursorPos(p.x, p.y);
+	}
 private:
 	ScreenshotAssist* ssa = new ScreenshotAssist();
 
 	struct {
 		int x, y;
 		int x_box, y_box;
-		int box_size;
+		int box_size; // assuming all boxes have equal length sides
 	}ms_data;
 };
